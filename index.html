@@ -1,0 +1,151 @@
+<html>
+<head>
+    <title>
+        demo
+    </title>
+    <style>
+        .package {
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+        }
+
+        .img-container {
+            padding: 3px;
+            width: 40px;
+            height: 60px;
+            float: left;
+        }
+        span{
+            font-size: 20px;
+        }
+        .price{
+            color:red;
+        }
+    </style>
+</head>
+<body>
+<div class="row" style="margin-top: 5rem;text-align: center">
+    <h1>Turn.js & filter demo</h1>
+    <hr>
+</div>
+<div class="row">
+    <div id="search-results">
+        Sort by:
+        <button class="sort btn" data-sort="name">
+            Name <i class="fa fa-fw"></i>
+        </button>
+        <button class="sort btn" data-sort="price">
+            Price <i class="fa fa-fw"></i>
+        </button>
+        <button class="sort btn" data-sort="difficulty">
+            Type <i class="fa fa-fw"></i>
+        </button>
+
+        Filter:
+        <label for="fantasy">fantasy</label>
+        <input type="checkbox" name="fantasy" class="filter" data-value="fantasy"/>
+        <label for="scary">scary</label>
+        <input type="checkbox" name="scary" class="filter" data-value="scary"/>
+        <label for="favourite">favourite</label>
+        <input type="checkbox" name="favourite" class="filter" data-value="favourite"/>
+
+        <div class="list">
+
+            <div class="package">
+                <div><a href="demos/basic/index.html"><img src="demos/basic/pages/1.jpg" class="img-container"></a>
+                </div>
+                <span class="name">Basic</span><br/>
+                <span class="price"><strong>$ 5 </strong></span><br/>
+                <span class="difficulty">fantasy</span>
+            </div>
+
+
+            <div class="package">
+                <div><a href="demos/docs/index.html"><img src="demos/Docs/pages/1.png" class="img-container"></a></div>
+                <span class="name">Docs</span><br/>
+                <span class="price"><strong>$ 10 </strong></span><br/>
+                <span class="difficulty">scary</span>
+            </div>
+
+
+            <div class="package">
+                <div><a href="demos/double-page/index.html"><img src="demos/double-page/pages/1.jpg"
+                                                                 class="img-container"> </a></div>
+                <span class="name">Double-page</span><br/>
+                <span class="price"><strong>$ 7 </strong></span><br/>
+                <span class="difficulty">favourite</span>
+            </div>
+
+
+            <div class="package">
+                <div><a href="demos/magazine/index.html"><img src="demos/magazine/pages/1.jpg"
+                                                              class="img-container"></a></div>
+                <span class="name">Magazine</span><br/>
+                <span class="price"><strong>$ 9 </strong></span><br/>
+                <span class="difficulty">fantasy</span>
+            </div>
+
+
+            <div class="package">
+                <div><a href="demos/steve-jobs/index.html"><img src="demos/steve-jobs/pages/preview.jpg"
+                                                                class="img-container"></a></div>
+                <span class="name">Steve-jobs</span><br/>
+                <span class="price"><strong>$ 11 </strong></span><br/>
+                <span class="difficulty">scary</span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.0/list.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var options = {
+            valueNames: ['name', 'price', 'difficulty']
+        };
+
+        var userList = new List('search-results', options);
+        var activeFilters = [];
+
+        //sort
+        userList.on("updated", function () {
+            $('.sort').each(function () {
+                if ($(this).hasClass("asc")) {
+                    $(this).find(".fa").addClass("fa-sort-asc").removeClass("fa-sort-desc").show();
+                } else if ($(this).hasClass("desc")) {
+                    $(this).find(".fa").addClass("fa-sort-desc").removeClass("fa-sort-asc").show();
+                } else {
+                    $(this).find(".fa").hide();
+                }
+            })
+        })
+
+        //filter
+        $('.filter').change(function () {
+            var isChecked = this.checked;
+            var value = $(this).data("value");
+
+            if (isChecked) {
+                //  add to list of active filters
+                activeFilters.push(value);
+            }
+            else {
+                // remove from active filters
+                activeFilters.splice(activeFilters.indexOf(value), 1);
+            }
+
+            userList.filter(function (item) {
+                if (activeFilters.length > 0) {
+                    return (activeFilters.indexOf(item.values().difficulty)) > -1;
+                }
+                return true;
+            });
+        });
+
+    });
+</script>
+</body>
+</html>
